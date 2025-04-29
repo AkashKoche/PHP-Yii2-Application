@@ -34,4 +34,4 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
             cd /home/ubuntu
-            ansible-playbook -i "localhost," deploy-stack.yml
+            ansible-playbook -i "localhost," ./deployment/deploy-stack.yml
