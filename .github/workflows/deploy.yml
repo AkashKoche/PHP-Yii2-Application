@@ -34,4 +34,5 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
             cd /home/ubuntu
-            ansible-playbook -i "localhost," ./deployment/deploy-stack.yml
+            git clone https://github.com/AkashKoche/PHP-Yii2-Application.git
+            ansible-playbook -i "localhost," ./PHP-Yii2-Application/deployment/deploy-stack.yml
