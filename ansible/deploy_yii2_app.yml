@@ -1,3 +1,4 @@
+---
 - name: Initialize Docker Swarm
   shell: docker swarm init
   
