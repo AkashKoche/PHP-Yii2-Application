@@ -49,7 +49,7 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ env.EC2_HOST }} >> ~/.ssh/known_hosts
 
-          ansible-playbook ansible/deploy_yii2_app.yml \
+          ansible-playbook ansible/ansible-playbook.yml \
             -i "${{ env.EC2_HOST }}," \
             --user=${{ env.EC2_USER }} \
             --private-key=~/.ssh/id_rsa \

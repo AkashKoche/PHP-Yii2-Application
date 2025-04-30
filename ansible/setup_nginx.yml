@@ -1,0 +1,6 @@
+- name: Install NGINX
+- name: Install Git
+- name: Copy NGINX config
+  copy:
+    src: nginx/default.conf
+    dest: /etc/nginx/sites-available/default
