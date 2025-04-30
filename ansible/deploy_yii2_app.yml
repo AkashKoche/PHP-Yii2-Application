@@ -1,0 +1,20 @@
+- name: Initialize Docker Swarm
+  shell: docker swarm init
+  
+- name: Check if Docker Swarm is already initialized
+  command: docker info -f '{{.Swarm.LocalNodeState}}'
+  register: swarm_status
+  changed_when: false
+  failed_when: false
+
+- name: Initialize Docker Swarm if not initialized
+  shell: docker swarm init
+  when: swarm_status.stdout != "active"
+
+- name: Clone the application repo
+  git:
+    repo: "{{ https://github.com/AkashKoche/PHP-Yii2-Application.git }}"
+
+- name: Deploy Yii2 app stack
+  shell: docker stack deploy -c docker-compose.yml yii2_stack
+  

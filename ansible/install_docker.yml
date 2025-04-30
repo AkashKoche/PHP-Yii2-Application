@@ -1,0 +1,6 @@
+- name: Install required packages
+  apt:
+    name: ['apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common']
+- name: Add Docker GPG key / repository
+- name: Install Docker CE
+- name: Install Docker Compose
