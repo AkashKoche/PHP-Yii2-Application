@@ -10,7 +10,7 @@
     docker_image: "akashkoche/php-yii2-app:latest"
     app_path: /opt/yii2-app
 
-tasks:
+  tasks:
     - name: Initialize Docker Swarm
       shell: docker swarm init || true
       args:
