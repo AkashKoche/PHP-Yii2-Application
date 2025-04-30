@@ -36,3 +36,7 @@
       shell: docker stack deploy -c docker-compose.yml yii2_stack
       args:
         chdir: "{{ app_path }}"
+        
+    - name: Restart Nginx
+      shell: systemctl restart nginx
+
