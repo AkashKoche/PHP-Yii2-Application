@@ -13,8 +13,6 @@
   tasks:
     - name: Initialize Docker Swarm
       shell: docker swarm init || true
-      args:
-        warn: false
 
     - name: Clone Yii2 application repository
       git:
