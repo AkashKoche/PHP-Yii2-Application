@@ -1,6 +1,25 @@
-- name: Install NGINX
-- name: Install Git
-- name: Copy NGINX config
-  copy:
-    src: nginx/default.conf
-    dest: /etc/nginx/sites-available/default
+---
+- name: Install and configure NGINX
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Install NGINX
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Copy NGINX reverse proxy config
+      copy:
+        src: ../nginx/default.conf
+        dest: /etc/nginx/conf.d/default.conf
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Restart NGINX
+      service:
+        name: nginx
+        state: restarted
+        enabled: yes

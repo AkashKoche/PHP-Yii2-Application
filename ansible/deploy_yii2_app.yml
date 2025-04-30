@@ -1,21 +1,39 @@
 ---
-- name: Initialize Docker Swarm
-  shell: docker swarm init
-  
-- name: Check if Docker Swarm is already initialized
-  command: docker info -f '{{.Swarm.LocalNodeState}}'
-  register: swarm_status
-  changed_when: false
-  failed_when: false
+- name: Deploy Yii2 App via Docker Swarm
+  hosts: all
+  become: true
+  vars:
+    app_repo_url: "https://github.com/AkashKoche/PHP-Yii2-Application.git"
+    docker_image: "akashkoche/php-yii2-app:latest"
+    app_path: /opt/yii2-app
 
-- name: Initialize Docker Swarm if not initialized
-  shell: docker swarm init
-  when: swarm_status.stdout != "active"
+  tasks:
 
-- name: Clone the application repo
-  git:
-    repo: "{{ https://github.com/AkashKoche/PHP-Yii2-Application.git }}"
+    - name: Include Docker install tasks
+      import_playbook: install_docker.yml
 
-- name: Deploy Yii2 app stack
-  shell: docker stack deploy -c docker-compose.yml yii2_stack
-  
+    - name: Initialize Docker Swarm
+      shell: docker swarm init || true
+      args:
+        warn: false
+
+    - name: Clone Yii2 application repository
+      git:
+        repo: "{{ https://github.com/AkashKoche/PHP-Yii2-Application.git }}"
+        dest: "{{ app_path }}"
+        force: yes
+
+    - name: Copy docker-compose.yml
+      copy:
+        src: ../docker-compose.yml
+        dest: "{{ app_path }}/docker-compose.yml"
+
+    - name: Copy NGINX config
+      copy:
+        src: ../nginx/default.conf
+        dest: "{{ app_path }}/nginx/default.conf"
+
+    - name: Deploy Docker stack
+      shell: docker stack deploy -c docker-compose.yml yii2_stack
+      args:
+        chdir: "{{ app_path }}"
