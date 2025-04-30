@@ -1,4 +1,7 @@
 ---
+- import_playbook: install_docker.yml
+- import_playbook: setup_nginx.yml
+
 - name: Deploy Yii2 App via Docker Swarm
   hosts: all
   become: true
@@ -7,11 +10,7 @@
     docker_image: "akashkoche/php-yii2-app:latest"
     app_path: /opt/yii2-app
 
-  tasks:
-
-    - name: Include Docker install tasks
-      import_playbook: install_docker.yml
-
+tasks:
     - name: Initialize Docker Swarm
       shell: docker swarm init || true
       args:
@@ -19,7 +18,7 @@
 
     - name: Clone Yii2 application repository
       git:
-        repo: "{{ https://github.com/AkashKoche/PHP-Yii2-Application.git }}"
+        repo: "{{ app_repo_url }}"
         dest: "{{ app_path }}"
         force: yes
 
